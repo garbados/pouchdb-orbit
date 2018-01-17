@@ -1,0 +1,23 @@
+{
+  "name": "pouchdb-orbit",
+  "version": "1.0.0-alpha",
+  "description": "A plugin for PouchDB that adds replication over OrbitDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && dependency-check . --unused --no-dev && mocha -R spec test.js"
+  },
+  "author": "Diana Thayer <garbados@gmail.com>",
+  "license": "Apache-2.0",
+  "dependencies": {},
+  "devDependencies": {
+    "dependency-check": "^3.0.0",
+    "documentation": "^5.3.5",
+    "ipfs": "^0.27.7",
+    "mocha": "^4.1.0",
+    "nyc": "^11.4.1",
+    "orbit-db": "^0.19.2",
+    "pouchdb": "^6.4.1",
+    "rimraf": "^2.6.2",
+    "standard": "^10.0.3"
+  }
+}
