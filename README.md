@@ -1,5 +1,7 @@
 # PouchDB-Orbit
 
+**NOTE: This is a proof-of-concept. Expect many breaking changes and do not expect a useful degree of functionality until this warning has disappeared.**
+
 An [OrbitDB](https://github.com/orbitdb/orbit-db) plugin for [PouchDB](https://pouchdb.com/) that adds some methods for P2P replication:
 
 ```javascript
@@ -11,29 +13,22 @@ PouchDB.plugin(require('pouchdb-orbit'))
 const db = new PouchDB(dbName)
 db.load(orbit).then(function () {
   // DB now synced over IPFS
-  return db.toMultihash()
-}).then(function (hash) {
-  // share this hash with friends
+  console.log('hooray!')
+  // share this address with friends
   // and they can replicate the DB
   // across P2P infrastructure
-  console.log(hash)
+  console.log(db.address)
 })
 ```
 
-You can also pre-load from a certain hash, or join one later:
+You can also pre-load from a certain hash:
 
 ```javascript
 // ... using the hash from above ...
-db.load(orbit, hash).then(function () {
+db.load(orbit, address).then(function () {
   // DB is now synced with the given hash!
   // Any properly formatted log entries
   // will have been mapped to the DB.
-})
-
-// If a DB has already loaded
-// you can use `.join(hash)`.
-db.join(otherHash).then(function () {
-  // DB is now synced with the given hash.
 })
 ```
 
@@ -54,11 +49,23 @@ PouchDB.plugin(require('pouchdb-orbit'))
 
 ## Usage
 
-The plugin adds three methods to instances of PouchDB:
+The plugin adds some methods and properties to each PouchDB instance:
 
-* `db.load(orbit, hash)`: Given an OrbitDB instance, the plugin creates a docstore that it matches against the PouchDB's changes feed. The returned promise resolves once both datastructures have been synced.
-* `db.join(hash)`: After a database has already been associated with an OrbitDB instance by calling `.load(orbit)`, you can sync with other hashes by calling this method. It returns a promise that resolves once the local datastructures, the PouchDB database and the OrbitDB docstore, have caught up to it.
-* `db.toHash()`: Returns a promise that resolves to the hash address of this database. Share this hash with others, and they can pass it to `.load(orbit, hash)` or `.join(hash)`.
+- `#load(orbit, [address]) -> Promise`
+
+Creates an OrbitDB store and registers event listeners with it and the PouchDB changes feed in order to both stores synchronized with each other. Returns a promise that resolves once the the OrbitDB store is ready for querying.
+
+- `#sync(address)`
+
+Retrieves entries from the given OrbitDB address and merges them locally, adding them to PouchDB. Returns a promise that resolves once all the documents have been processed.
+
+- `#address`
+
+Getter for the OrbitDB address (`{ root, path }`) for this database.
+
+- `#key`
+
+Getter for the keypair for this OrbitDB instance.
 
 ## License
 
