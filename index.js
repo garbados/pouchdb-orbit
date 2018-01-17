@@ -3,11 +3,7 @@
  * @param  {[type]} PouchDB [description]
  * @return {[type]}         [description]
  */
-module.exports = function (PouchDB) {
-  PouchDB.prototype.toAddress = toAddress
-  PouchDB.prototype.join = join
-  PouchDB.prototype.load = load
-}
+module.exports = { load, sync }
 
 /**
  * [load description]
@@ -17,6 +13,7 @@ module.exports = function (PouchDB) {
  * @return {[type]}            [description]
  */
 function load (orbit, hash, callback) {
+  this._orbit = orbit
   this._feed = this.changes({ live: true, include_docs: true })
 
   const onReplicated = (address) => {
@@ -42,23 +39,12 @@ function load (orbit, hash, callback) {
     this._store = store
     this._store.events.on('replicated', onReplicated)
     this._feed.on('change', onChange)
+    this.address = this._store.address
+    this.key = this._store.key
+    return store.load()
   })
 }
 
-/**
- * [join description]
- * @param  {[type]} hash [description]
- * @return {[type]}      [description]
- */
-function join (hash) {
-  const head = { key: hash }
-  return this._store.sync([head])
-}
-
-/**
- * [toHash description]
- * @return {[type]} [description]
- */
-function toAddress () {
-  return this._store.address
+function sync (...heads) {
+  return this._store.sync(heads)
 }
