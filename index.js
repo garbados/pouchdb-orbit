@@ -1,18 +1,19 @@
-/**
- * [exports description]
- * @param  {[type]} PouchDB [description]
- * @return {[type]}         [description]
- */
+'use strict'
+
 module.exports = { load, sync }
 
 /**
- * [load description]
- * @param  {[type]}   orbit    [description]
- * @param  {[type]}   hash     [description]
- * @param  {Function} callback [description]
- * @return {[type]}            [description]
+ * Given an OrbitDB instance, instantiates a local docstore
+ * that maps to the latest state of the PouchDB instance, and returns
+ * once both datastructures have been mapped to each other.
+ * @param  {OrbitDB}   orbit      OrbitDB instance. Required.
+ * @param  {Object} address       Address to an OrbitDB store.
+ * @param  {String} address.root  Hash of the store's latest entry.
+ * @param  {String} address.path  Name of the database.
+ * @return {Promise}              A promise that resolves once the OrbitDB and PouchDB instances are up to date.
  */
-function load (orbit, hash, callback) {
+function load (orbit, address) {
+  if (!orbit) throw new Error('An instance of OrbitDB is required.')
   this._orbit = orbit
   this._feed = this.changes({ live: true, include_docs: true })
 
@@ -35,7 +36,7 @@ function load (orbit, hash, callback) {
     }
   }
 
-  return orbit.docstore(hash || this.name).then((store) => {
+  return orbit.docstore(address || this.name).then((store) => {
     this._store = store
     this._store.events.on('replicated', onReplicated)
     this._feed.on('change', onChange)
@@ -45,6 +46,20 @@ function load (orbit, hash, callback) {
   })
 }
 
-function sync (...heads) {
-  return this._store.sync(heads)
+/**
+ * Replicate with another OrbitDB store using its address,
+ * pulling their records into yours. NOTE: This method does not
+ * push documents to the store at the given address.
+ * @param  {Object} address       Address to the other store.
+ * @param  {String} address.root  Hash of the store's latest entry.
+ * @param  {String} address.path  Name of the database.
+ * @return {Promise}              Resolves once replication completes..
+ */
+function sync (address) {
+  // FIXME `store.load()` returns before retrieving its own contents.
+  return this._orbit.docstore(address).then((store) => {
+    return store.load().then(() => {
+      return this.bulkDocs(store.all, { new_edits: false })
+    })
+  })
 }

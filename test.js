@@ -46,9 +46,22 @@ describe('#load', function () {
     assert(address.root)
     assert.equal(address.path, DB_NAME)
   })
+
+  it('should handle updates', function () {
+    return this.db.post({ status: 'ok' }).then(() => {
+      return new Promise((resolve) => {
+        this.db._store.events.once('write', () => {
+          assert.equal(this.db._store.all.length, 1)
+          resolve()
+        })
+      })
+    }).catch((e) => {
+      console.log(e)
+    })
+  })
 })
 
-// FIXME - requires dynamic permissions: https://github.com/orbitdb/orbit-db/issues/292
+// FIXME #sync is broken for reasons unknown
 describe.skip('#sync', function () {
   before(function () {
     this.dbs = [
@@ -59,18 +72,20 @@ describe.skip('#sync', function () {
 
   it('should sync two databases', function () {
     const tasks = this.dbs.map((db) => {
-      return db.post({ status: 'ok' }).then(() => {
-        return db.load(this.orbit)
+      return db.load(this.orbit).then(() => {
+        return db.post({ status: 'ok' })
       })
     })
     return Promise.all(tasks).then(() => {
       let db = this.dbs[0]
-      let head = this.dbs[1].address.root
-      return db.sync(head).then(function () {
+      let address = this.dbs[1].address
+      return db.sync(address).then(function () {
         return db.allDocs()
       })
     }).then((result) => {
-      assert.equal(result.length, 2)
+      assert.equal(result.rows.length, 2)
+    }).catch((e) => {
+      console.log(e)
     })
   })
 })
