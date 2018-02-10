@@ -5,11 +5,14 @@ const IPFS = require('ipfs')
 const OrbitDB = require('orbit-db')
 const PouchDB = require('pouchdb')
 const rimraf = require('rimraf')
+const { name, version } = require('./package.json')
 PouchDB.plugin(require('.'))
 
 const DB_NAME = 'test'
 
-describe([].join(' @ '), function () {
+describe([name, version].join(' @ '), function () {
+  this.timeout(10000)
+
   before(function () {
     this.ipfs = new IPFS({
       EXPERIMENTAL: {
@@ -29,7 +32,7 @@ describe([].join(' @ '), function () {
     done()
     setTimeout(function () {
       process.exit(0)
-    }, 1000) // 3s
+    }, 1000)
   })
 
   describe('#load', function () {
