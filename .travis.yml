@@ -1,6 +1,9 @@
 language: node_js
 node_js:
 - 9
+cache:
+  directories:
+  - node_modules
 after_success:
 - npm i -g nyc coveralls
 - nyc npm test && nyc report --reporter=text-lcov | coveralls
