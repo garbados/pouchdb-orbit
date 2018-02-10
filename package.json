@@ -1,6 +1,6 @@
 {
   "name": "pouchdb-orbit",
-  "version": "1.0.1-alpha",
+  "version": "1.0.2-alpha",
   "description": "A plugin for PouchDB that adds replication over OrbitDB.",
   "main": "index.js",
   "scripts": {
