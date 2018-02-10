@@ -11,7 +11,7 @@ PouchDB.plugin(require('.'))
 const DB_NAME = 'test'
 
 describe([name, version].join(' @ '), function () {
-  this.timeout(10000)
+  this.timeout(20000)
 
   before(function () {
     this.ipfs = new IPFS({
