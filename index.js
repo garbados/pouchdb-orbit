@@ -47,19 +47,27 @@ function load (orbit, address) {
 }
 
 /**
- * Replicate with another OrbitDB store using its address,
- * pulling their records into yours. NOTE: This method does not
- * push documents to the store at the given address.
+ * Pull documents from another OrbitDB instance by its address,
+ * merging them into the local database.
  * @param  {Object} address       Address to the other store.
  * @param  {String} address.root  Hash of the store's latest entry.
  * @param  {String} address.path  Name of the database.
  * @return {Promise}              Resolves once replication completes..
  */
 function sync (address) {
-  // FIXME `store.load()` returns before retrieving its own contents.
   return this._orbit.docstore(address).then((store) => {
-    return store.load().then(() => {
-      return this.bulkDocs(store.all, { new_edits: false })
+    return new Promise((resolve, reject) => {
+      store.events.once('replicated', () => {
+        this.bulkDocs(store.all, { new_edits: false })
+            .then(() => {
+              return Promise.all([
+                store.close(),
+                store.drop()
+              ])
+            })
+            .then(resolve)
+            .catch(reject)
+      })
     })
   })
 }
