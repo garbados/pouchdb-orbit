@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = { load, sync }
+module.exports = { load, merge }
 
 /**
  * Given an OrbitDB instance, instantiates a local docstore
@@ -54,7 +54,7 @@ function load (orbit, address) {
  * @param  {String} address.path  Name of the database.
  * @return {Promise}              Resolves once replication completes..
  */
-function sync (address) {
+function merge (address) {
   return this._orbit.docstore(address).then((store) => {
     return new Promise((resolve, reject) => {
       store.events.once('replicated', () => {

@@ -45,7 +45,7 @@ describe([name, version].join(' @ '), function () {
       assert(this.db.address)
       assert(this.db.key)
       assert(this.db.load)
-      assert(this.db.sync)
+      assert(this.db.merge)
     })
 
     it('should load OK', function () {
@@ -68,7 +68,7 @@ describe([name, version].join(' @ '), function () {
     })
   })
 
-  describe('#sync', function () {
+  describe('#merge', function () {
     before(function () {
       this.dbs = [
         new PouchDB([DB_NAME, '0'].join('-')),
@@ -76,7 +76,7 @@ describe([name, version].join(' @ '), function () {
       ]
     })
 
-    it('should sync two databases', function () {
+    it('should merge two databases', function () {
       const tasks = this.dbs.map((db) => {
         return db.load(this.orbit).then(() => {
           return db.post({ status: 'ok' })
@@ -85,7 +85,7 @@ describe([name, version].join(' @ '), function () {
       return Promise.all(tasks).then(() => {
         let db = this.dbs[0]
         let address = this.dbs[1].address
-        return db.sync(address).then(function () {
+        return db.merge(address).then(function () {
           return db.allDocs()
         })
       }).then((result) => {
