@@ -59,7 +59,7 @@ The plugin adds some methods and properties to each PouchDB instance:
 
 Creates an OrbitDB store and registers event listeners with it and the PouchDB changes feed in order to both stores synchronized with each other. Returns a promise that resolves once the the OrbitDB store is ready for querying.
 
-- `.sync(address)`
+- `.merge(address)`
 
 Retrieves entries from the given OrbitDB address and merges them locally, adding them to PouchDB. Returns a promise that resolves once all the documents have been processed.
 
