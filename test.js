@@ -26,7 +26,7 @@ describe([].join(' @ '), function () {
     rimraf.sync(DB_NAME)
     rimraf.sync(DB_NAME + '-*')
     // fixme: ipfs doesn't close nicely
-    process.exit(0)
+    // process.exit(0)
   })
 
   describe('#load', function () {
