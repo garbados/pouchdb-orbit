@@ -17,5 +17,22 @@
     "pouchdb": "^6.4.1",
     "rimraf": "^2.6.2",
     "standard": "^10.0.3"
-  }
+  },
+  "engines": {
+    "node": ">=9.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/garbados/pouchdb-orbit.git"
+  },
+  "keywords": [
+    "pouchdb",
+    "orbitdb",
+    "ipfs",
+    "p2p"
+  ],
+  "bugs": {
+    "url": "https://github.com/garbados/pouchdb-orbit/issues"
+  },
+  "homepage": "https://github.com/garbados/pouchdb-orbit#readme"
 }
