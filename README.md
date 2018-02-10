@@ -1,6 +1,10 @@
 # PouchDB-Orbit
 
-**NOTE: This is a proof-of-concept. Expect many breaking changes and do not expect a useful degree of functionality until this warning has disappeared.**
+[![Stability](https://img.shields.io/badge/stability-experimental-orange.svg?style=flat-square)](https://nodejs.org/api/documentation.html#documentation_stability_index)
+[![NPM Version](https://img.shields.io/npm/v/pouchdb-orbit.svg?style=flat-square)](https://www.npmjs.com/package/pouchdb-orbit)
+[![JS Standard Style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
+[![Build Status](https://img.shields.io/travis/garbados/pouchdb-orbit/master.svg?style=flat-square)](https://travis-ci.org/garbados/pouchdb-orbit)
+[![Coverage Status](https://img.shields.io/coveralls/github/garbados/pouchdb-orbit/master.svg?style=flat-square)](https://coveralls.io/github/garbados/pouchdb-orbit?branch=master)
 
 An [OrbitDB](https://github.com/orbitdb/orbit-db) plugin for [PouchDB](https://pouchdb.com/) that adds some methods for P2P replication:
 
@@ -51,19 +55,19 @@ PouchDB.plugin(require('pouchdb-orbit'))
 
 The plugin adds some methods and properties to each PouchDB instance:
 
-- `#load(orbit, [address]) -> Promise`
+- `.load(orbit, [address]) -> Promise`
 
 Creates an OrbitDB store and registers event listeners with it and the PouchDB changes feed in order to both stores synchronized with each other. Returns a promise that resolves once the the OrbitDB store is ready for querying.
 
-- `#sync(address)`
+- `.sync(address)`
 
 Retrieves entries from the given OrbitDB address and merges them locally, adding them to PouchDB. Returns a promise that resolves once all the documents have been processed.
 
-- `#address`
+- `.address`
 
 Getter for the OrbitDB address (`{ root, path }`) for this database.
 
-- `#key`
+- `.key`
 
 Getter for the keypair for this OrbitDB instance.
 
