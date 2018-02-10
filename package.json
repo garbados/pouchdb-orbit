@@ -11,10 +11,8 @@
   "dependencies": {},
   "devDependencies": {
     "dependency-check": "^3.0.0",
-    "documentation": "^5.3.5",
     "ipfs": "^0.27.7",
     "mocha": "^4.1.0",
-    "nyc": "^11.4.1",
     "orbit-db": "^0.19.2",
     "pouchdb": "^6.4.1",
     "rimraf": "^2.6.2",

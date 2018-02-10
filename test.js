@@ -22,9 +22,7 @@ describe([].join(' @ '), function () {
     })
   })
 
-  after(async function () {
-    await this.orbit.stop()
-    await this.ipfs.stop()
+  after(function () {
     rimraf.sync(DB_NAME)
     rimraf.sync(DB_NAME + '-*')
     // fixme: ipfs doesn't close nicely
